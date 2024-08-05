@@ -11,18 +11,26 @@ const NewPrompt = () => {
     isLoading: false,
     error: "",
     dbData: {},
+    aiData: {},
   });
   const endRef = useRef(null);
   useEffect(() => {
     endRef.current.scrollIntoView({ behaviour: "smooth" });
-  }, [question,answer,img.dbData]);
+  }, [question, answer, img.dbData]);
 
   const add = async (text) => {
-    setQuestion(text)
-    const result = await model.generateContent(text);
+    setQuestion(text);
+    const result = await model.generateContent(
+      Object.entries(img.aiData).length ? [img.aiData, text] : [text]
+    );
     const response = await result.response;
-    setAnswer(response.text())
-    //console.log(text);
+    setAnswer(response.text());
+    setImg({
+      isLoading: false,
+      error: "",
+      dbData: {},
+      aiData: {},
+    });
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,7 +50,11 @@ const NewPrompt = () => {
         />
       )}
       {question && <div className="message user">{question}</div>}
-      {answer && <div className="message"><Markdown>{answer}</Markdown></div>}
+      {answer && (
+        <div className="message">
+          <Markdown>{answer}</Markdown>
+        </div>
+      )}
       {/* <button onClick={add}>TEST API</button> */}
       <div className="endChat" ref={endRef}></div>
       <form className="newForm" onSubmit={handleSubmit}>
