@@ -13,6 +13,18 @@ const NewPrompt = () => {
     dbData: {},
     aiData: {},
   });
+  const chat = model.startChat({
+    history: [
+      {
+        role: "user",
+        parts: [{ text: "hello i have 2 dogs in the house" }],
+      },
+      {
+        role: "model",
+        parts: [{ text: "great to meet you what would you like to know" }],
+      },
+    ],
+  });
   const endRef = useRef(null);
   useEffect(() => {
     endRef.current.scrollIntoView({ behaviour: "smooth" });
@@ -20,7 +32,7 @@ const NewPrompt = () => {
 
   const add = async (text) => {
     setQuestion(text);
-    const result = await model.generateContent(
+    const result = await chat.sendMessage(
       Object.entries(img.aiData).length ? [img.aiData, text] : [text]
     );
     const response = await result.response;
