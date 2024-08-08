@@ -3,7 +3,24 @@ import "./DashBoard.css";
 import { useAuth } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
 const DashBoard = () => {
-  const {userId,isLoaded}=useAuth();
+
+  const{userId,isLoaded}=useAuth();
+
+  console.log(userId)
+  const handleSubmit= async (e)=>{
+     e.preventDefault();
+     const text=e.target.text.value;
+     if(!text)return
+
+     await fetch("http://localhost:3000/api/chats", {
+      method: "POST",
+      //credentials:"include",
+      headers: {
+        "content-Type": "application/json",
+      },
+      body: JSON.stringify({ text,userId }),
+    });
+  }
   const navigate=useNavigate();
   useEffect(()=>{
     if(isLoaded && !userId){
@@ -34,8 +51,8 @@ const DashBoard = () => {
         </div>
       </div>
       <div className="formContainer">
-        <form>
-          <input type='text' placeholder='Ask me anything'/>
+        <form onSubmit={handleSubmit}>
+          <input type='text' name="text" placeholder='Ask me anything'/>
           <button>
             <img src='./arrow.png' alt=''/>
           </button>

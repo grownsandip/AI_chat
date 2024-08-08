@@ -35,11 +35,11 @@ const NewPrompt = () => {
     const result = await chat.sendMessageStream(
       Object.entries(img.aiData).length ? [img.aiData, text] : [text]
     );
-    let accumulatedText=""
-    for await(const chunk of result.stream){
-      const chunkText=chunk.result.text();
-      console.log(chunkText)
-      accumulatedText+=chunkText
+    let accumulatedText = "";
+    for await (const chunk of result.stream) {
+      const chunkText = chunk.text();
+      console.log(chunkText);
+      accumulatedText += chunkText;
       setAnswer(accumulatedText);
     }
     setImg({
@@ -52,6 +52,7 @@ const NewPrompt = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const text = e.target.text.value;
+    console.log(text)
     if (!text) return;
     add(text);
   };
