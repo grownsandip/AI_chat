@@ -4,14 +4,15 @@ import cors from "cors";
 import mongoose from 'mongoose';
 import Chat from './models/chat.js';
 import UserChats from './models/userChats.js';
-
+import { ClerkExpressRequireAuth } from "@clerk/clerk-sdk-node";
 
 const port = process.env.PORT || 3000;
 
 const app = express();
 
 app.use(cors({
-    origin: process.env.CLIENT_URL
+    origin: process.env.CLIENT_URL,
+    credentials:true
 }))
 app.use(express.json());
 const connect = async () => {
@@ -33,9 +34,15 @@ app.get("/api/upload", (req, res) => {
     const result = imagekit.getAuthenticationParameters();
     res.send(result);
 })
-app.post("/api/chats", async (req, res) => {
-    const { userId, text } = req.body;
-    console.log(userId, text)
+// app.get("/api/test",ClerkExpressRequireAuth(),(req,res)=>{
+//     const userId=req.auth.userId
+//     console.log(userId)
+//     res.send("Success")
+// })
+app.post("/api/chats",ClerkExpressRequireAuth(), async (req, res) => {
+    const userId=req.auth.userId
+    const {text } = req.body;
+    //console.log(userId, text)
     try {
         //create new chat
         const newChat = new Chat({
@@ -74,6 +81,10 @@ app.post("/api/chats", async (req, res) => {
         res.status(500).json({ message: "failed creating chats" })
     }
 })
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(401).send('Unauthenticated!');
+  });
 app.listen(port, () => {
     connect();
     console.log(`server is running at ${port}`);

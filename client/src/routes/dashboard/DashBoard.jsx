@@ -14,7 +14,7 @@ const DashBoard = () => {
 
      await fetch("http://localhost:3000/api/chats", {
       method: "POST",
-      //credentials:"include",
+      credentials:"include",
       headers: {
         "content-Type": "application/json",
       },
