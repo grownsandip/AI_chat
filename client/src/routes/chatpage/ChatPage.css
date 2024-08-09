@@ -11,12 +11,13 @@
   .wrapper {
     flex: 1;
     height: 100%;
+    width: 50%;
     display: flex;
     justify-content: center;
     overflow: scroll;
 
     .chat{
-        width: 50%;
+        width: 100%;
         display: flex;
         flex-direction: column;
         gap: 20px;
@@ -30,6 +31,7 @@
                 border-radius: 20px;
                 max-width: 80%;
                 align-self: flex-end;
+                max-width: fit-content;
             }
         }
 
