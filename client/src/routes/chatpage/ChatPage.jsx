@@ -7,20 +7,21 @@ import { IKImage } from "imagekitio-react";
 const ChatPage = () => {
   const path = useLocation().pathname;
   const chatId = path.split("/").pop();
-  // console.log(chatId);
-  const { isPending, error, data } = useQuery({
-    queryKey: ["chat", chatId],
-    queryFn: () =>
+   //console.log(chatId);
+  const { isPending, error, data } =  useQuery({
+    queryKey: ["chats", chatId],
+    queryFn:  () =>
       fetch(`${import.meta.env.VITE_API_URL}/api/chats/${chatId}`, {
         credentials: "include",
-      }).then((res) => res.json()),
-  });
+      }).then((res) => res.json(error)),
+  })
+ // console.log(data)
   return (
     <div className="chatPage">
       <div className="wrapper">
         <div className="chat">
           {isPending
-            ? "loding"
+            ? "loading.."
             : error
             ? "Something went wrong"
             : data?.history?.map((message, i) => (
@@ -43,7 +44,7 @@ const ChatPage = () => {
                 </div>
                 </>
               ))}
-          <NewPrompt />
+          {data && <NewPrompt data={data}/>}
         </div>
       </div>
     </div>

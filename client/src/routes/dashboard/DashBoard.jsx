@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react'
+
 import "./DashBoard.css";
-// import { useAuth } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -30,13 +29,6 @@ const DashBoard = () => {
      if(!text)return
      mutation.mutate(text)
   }
-  // const navigate=useNavigate();
-  // useEffect(()=>{
-  //   if(isLoaded && !userId){
-  //     navigate("/sign-in");
-  //   }
-  // },[userId,isLoaded,navigate]);
-  // if(!isLoaded)return "Loading...";
   return (
     <div className='dashboard'>
       <div className="texts">
